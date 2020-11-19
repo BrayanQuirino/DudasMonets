@@ -1,0 +1,123 @@
+package reglas
+
+import com.reglas.modelo.Pago;
+
+dialect "mvel"
+
+rule "v1"
+	when
+		$hecho : Pago (banderaPagoCodi == false && fechaOperacionSiguienteDiaHabil != fechaOperacion)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "fechaOperacionSiguienteDiaHabil (" + $hecho.getFechaOperacionSiguienteDiaHabil() + ") != fechaOperacion |"+
+        "fechaOperacion (" + $hecho.getFechaOperacion() + ")");
+		modify($hecho)
+end;
+
+rule "v2"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && claveMedioLiquidador == 'SPEI' && fechaLiquidaPago > fechaOperacion)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "claveMedioLiquidador (" + $hecho.getClaveMedioLiquidador() + ") == SPEI"+
+        "fechaLiquidaPago ("+$hecho.getFechaLiquidaPago()+") > fechaOperacion");
+		modify($hecho)
+end;
+
+rule "v3"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && claveTipoLiquidacion == 'RECTO' && fechaLiquidaPago > fechaOperacion)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "claveTipoLiquidacion (" + $hecho.getClaveTipoLiquidacion() + ") == RECTO"+
+        "fechaLiquidaPago ("+$hecho.getFechaLiquidaPago()+") > fechaOperacion");
+		modify($hecho)
+end;
+
+rule "v4"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && claveTipoLiquidacion == 'DECTO' && fechaLiquidaPago > fechaOperacion)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "claveTipoLiquidacion (" + $hecho.getClaveTipoLiquidacion() + ") == DECTO"+
+        "fechaLiquidaPago ("+$hecho.getFechaLiquidaPago()+") > fechaOperacion");
+		modify($hecho)
+end;
+
+rule "v5"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && diaSemana == 'DOMINGO')	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "diaSemana (" + $hecho.getDiaSemana() + ") == DOMINGO");
+		modify($hecho)
+end;
+
+rule "v6"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && diaInhabil == esFinDeSemana && banderaMedioLiquidadorDiaInhabil > 0 && banderaClaveMedioDiaInhabil > 0 && claveMedio == 'MOBILE' && banderaTelefonoContrato == 0)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "diaInhabil (" + $hecho.getDiaInhabil() + ") esFinDeSemana"+
+        "banderaMedioLiquidadorDiaInhabil ("+$hecho.getBanderaMedioLiquidadorDiaInhabil()+") | "+
+        "banderaClaveMedioDiaInhabil ("+$hecho.getBanderaClaveMedioDiaInhabil()+") | "+
+        "claveMedio ("+$hecho.getClaveMedio()+") == MOBILE|"+
+        "banderaTelefonoContrato ("+$hecho.getBanderaTelefonoContrato()+")");
+		modify($hecho)
+end;
+
+rule "v7"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && diaInhabil == esDiaDestivo && banderaMedioLiquidadorDiaInhabil > 0 && banderaClaveMedioDiaInhabil > 0 && claveMedio == 'MOBILE' && banderaTelefonoContrato == 0)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "diaInhabil (" + $hecho.getDiaInhabil() + ") esDiaFestivo"+
+        "banderaMedioLiquidadorDiaInhabil ("+$hecho.getBanderaMedioLiquidadorDiaInhabil()+") | "+
+        "banderaClaveMedioDiaInhabil ("+$hecho.getBanderaClaveMedioDiaInhabil()+") | "+
+        "claveMedio ("+$hecho.getClaveMedio()+") == MOBILE|"+
+        "banderaTelefonoContrato ("+$hecho.getBanderaTelefonoContrato()+")");
+		modify($hecho)
+end;
+
+rule "v8"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && diaInhabil == esFinDeSemana && banderaMedioLiquidadorDiaInhabil > 0 && banderaClaveMedioDiaInhabil > 0 && claveMedio == 'MNTMVL' && banderaTelefonoContrato == 0)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "diaInhabil (" + $hecho.getDiaInhabil() + ") esFinDeSemana"+
+        "banderaMedioLiquidadorDiaInhabil ("+$hecho.getBanderaMedioLiquidadorDiaInhabil()+") | "+
+        "banderaClaveMedioDiaInhabil ("+$hecho.getBanderaClaveMedioDiaInhabil()+") | "+
+        "claveMedio ("+$hecho.getClaveMedio()+") == MNTMVL|"+
+        "banderaTelefonoContrato ("+$hecho.getBanderaTelefonoContrato()+")");
+		modify($hecho)
+end;
+
+rule "v9"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && diaInhabil == esDiaDestivo && banderaMedioLiquidadorDiaInhabil > 0 && banderaClaveMedioDiaInhabil > 0 && claveMedio == 'MNTMVL' && banderaTelefonoContrato == 0)	
+	then
+		$hecho.setCodigoExcepcion("FLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ") == false |"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") == true |"+
+        "diaInhabil (" + $hecho.getDiaInhabil() + ") esDiaFestivo"+
+        "banderaMedioLiquidadorDiaInhabil ("+$hecho.getBanderaMedioLiquidadorDiaInhabil()+") | "+
+        "banderaClaveMedioDiaInhabil ("+$hecho.getBanderaClaveMedioDiaInhabil()+") | "+
+        "claveMedio ("+$hecho.getClaveMedio()+") == MNTMVL|"+
+        "banderaTelefonoContrato ("+$hecho.getBanderaTelefonoContrato()+")");
+		modify($hecho)
+end;

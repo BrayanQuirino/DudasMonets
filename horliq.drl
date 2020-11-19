@@ -1,0 +1,51 @@
+package reglas
+
+import com.reglas.modelo.Pago;
+
+dialect "mvel"
+
+rule "v1"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && banderaLiquidacionFinalSpei == false && horaInicial > horaActual)	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaLiquidacionFinalSpei (" + $hecho.getBanderaLiquidacionFinalSpei() +") == false"+
+        "horaInicial ("+$hecho.getHoraInicial()+") > horaActual ("+$hecho.getHoraActual()+")");
+		modify($hecho)
+end;
+
+rule "v2"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && banderaLiquidacionFinalSpei == false && horaCierre < horaActual)	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaLiquidacionFinalSpei (" + $hecho.getBanderaLiquidacionFinalSpei() +") == false"+
+        "horaInicial ("+$hecho.getHoraInicial()+") < horaActual ("+$hecho.getHoraActual()+")");
+		modify($hecho)
+end;
+
+rule "v3"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == false && horaInicial > horaActual)	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "horaInicial ("+$hecho.getHoraInicial()+") > horaActual ("+$hecho.getHoraActual()+")");
+		modify($hecho)
+end;
+
+rule "v4"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == false && horaCierre < horaActual)	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "horaInicial ("+$hecho.getHoraInicial()+") < horaActual ("+$hecho.getHoraActual()+")");
+		modify($hecho)
+end;

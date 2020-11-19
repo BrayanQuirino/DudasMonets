@@ -1,0 +1,73 @@
+package reglas
+
+import com.reglas.modelo.Pago;
+
+dialect "mvel"
+
+rule "v1"
+	when
+		$hecho : Pago (banderaExisteRegla == true && fechaOperacionSiguienteDiaHabil != fechaOperacion && banderaDiasNoLaborablesSpeiBookTransfer == 978)	
+	then
+		$hecho.setCodigoExcepcion("IMPSPE");
+		$hecho.setCondicionEjecutada(
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "fechaOperacionSiguienteDiaHabil (" + $hecho.getFechaOperacionSiguienteDiaHabil() + ") != fechaOperacion |"+
+        "fechaOperacion (" + $hecho.getFechaOperacion() + ")"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 978"+
+        );
+		modify($hecho)
+end;
+
+rule "v2"
+	when
+		$hecho : Pago (banderaExisteRegla == true && fechaOperacionSiguienteDiaHabil != fechaOperacion && banderaDiasNoLaborablesSpeiBookTransfer == 977)	
+	then
+		$hecho.setCodigoExcepcion("IMPSPE");
+		$hecho.setCondicionEjecutada(
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "fechaOperacionSiguienteDiaHabil (" + $hecho.getFechaOperacionSiguienteDiaHabil() + ") != fechaOperacion |"+
+        "fechaOperacion (" + $hecho.getFechaOperacion() + ")"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 977"+
+        );
+		modify($hecho)
+end;
+
+rule "v3"
+	when
+		$hecho : Pago (banderaExisteRegla == true && diaSemana == 'DOMINGO' && banderaDiasNoLaborablesSpeiBookTransfer == 978)	
+	then
+		$hecho.setCodigoExcepcion("IMPSPE");
+		$hecho.setCondicionEjecutada(
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "diaSemana (" + $hecho.getDiaSemana()) + ") == DOMINGO"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 978"+
+        );
+		modify($hecho)
+end;
+
+rule "v4"
+	when
+		$hecho : Pago (banderaExisteRegla == true && diaSemana == 'DOMINGO' && banderaDiasNoLaborablesSpeiBookTransfer == 977)	
+	then
+		$hecho.setCodigoExcepcion("IMPSPE");
+		$hecho.setCondicionEjecutada(
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "diaSemana (" + $hecho.getDiaSemana() + ") == DOMINGO"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 977"+
+        );
+		modify($hecho)
+end;
+
+rule "v5"
+	when
+		$hecho : Pago (banderaExisteRegla == true && fechaOperacionSiguienteDiaHabil == fechaOperacion && banderaDiasNoLaborablesSpeiBookTransfer == 978)	
+	then
+		$hecho.setCodigoExcepcion("IMPSPE");
+		$hecho.setCondicionEjecutada(
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "fechaOperacionSiguienteDiaHabil (" + $hecho.getFechaOperacionSiguienteDiaHabil() + ") != fechaOperacion |"+
+        "fechaOperacion (" + $hecho.getFechaOperacion() + ")"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 978"+
+        );
+		modify($hecho)
+end;

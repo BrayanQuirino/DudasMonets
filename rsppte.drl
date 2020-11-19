@@ -1,0 +1,41 @@
+package reglas
+
+import com.reglas.modelo.Pago;
+
+dialect "mvel"
+
+rule "v1"
+	when
+		$hecho : Pago (claveBancoPagador == null && claveMedioLiquidador == 'SPEI')	
+	then
+		$hecho.setCodigoExcepcion("RSPPTE");
+		$hecho.setCondicionEjecutada(
+        "claveBancoPagador (" + $hecho.getClaveBancoPagador() + ") == null|"+
+        "claveMedioLiquidador (" + $hecho.getClaveMedioLiquidador() + ") != SPEI"
+        );
+		modify($hecho)
+end;
+
+rule "v2"
+	when
+		$hecho : Pago (claveBancoPagador == null && idTipoPagoSpei != 17 && idTipoPagoSpei != 18 && idTipoPagoSpei != 23 && idTipoPagoSpei != 24)	
+	then
+		$hecho.setCodigoExcepcion("RSPPTE");
+		$hecho.setCondicionEjecutada(
+        "claveBancoPagador (" + $hecho.getClaveBancoPagador() + ") == null|"+
+        "idTipoPagoSpei (" + $hecho.getIdTipoPagoSpei() + ") != (17,18,23,24)"
+        );
+		modify($hecho)
+end;
+
+rule "v3"
+	when
+		$hecho : Pago (claveBancoPagador == null && codigoRespuesta != 0)	
+	then
+		$hecho.setCodigoExcepcion("RSPPTE");
+		$hecho.setCondicionEjecutada(
+        "claveBancoPagador (" + $hecho.getClaveBancoPagador() + ") == null|"+
+        "codigoRespuesta (" + $hecho.getCodigoRespuesta() + ") != 0"
+        );
+		modify($hecho)
+end;

@@ -1,0 +1,53 @@
+package reglas
+
+import com.reglas.modelo.Pago;
+
+dialect "mvel"
+
+rule "v1"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && banderaDiasNoLaborablesSpeiBookTransfer == 0 && claveTipoDetencion == 'HLIQUI')	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 0"+
+        "claveTipoDetencion ("+$hecho.getClaveTipoDetencion()+") == HLIQUI");
+		modify($hecho)
+end;
+
+rule "v2"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && banderaDiasNoLaborablesSpeiBookTransfer == 978 && claveTipoDetencion == 'HLIQUI')	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 978"+
+        "claveTipoDetencion ("+$hecho.getClaveTipoDetencion()+") == HLIQUI");
+		modify($hecho)
+end;
+
+rule "v3"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && banderaDiasNoLaborablesSpeiBookTransfer == 977 && claveTipoDetencion == 'HLIQUI')	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +") == 977"+
+        "claveTipoDetencion ("+$hecho.getClaveTipoDetencion()+") == HLIQUI");
+		modify($hecho)
+end;
+
+rule "v4"
+	when
+		$hecho : Pago (banderaPagoCodi == false && banderaExisteRegla == true && claveTipoDetencion == 'HLIQUI')	
+	then
+		$hecho.setCodigoExcepcion("HLIQUI");
+		$hecho.setCondicionEjecutada("banderaPagoCodi (" + $hecho.getBanderaPagoCodi() + ")|"+ 
+        "banderaExisteRegla (" + $hecho.getBanderaExisteRegla() + ") |"+
+        "banderaDiasNoLaborablesSpeiBookTransfer (" + $hecho.getBanderaDiasNoLaborablesSpeiBookTransfer() +")"+
+        "claveTipoDetencion ("+$hecho.getClaveTipoDetencion()+") == HLIQUI");
+		modify($hecho)
+end;
